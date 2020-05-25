@@ -21,27 +21,6 @@ function drawSprites () {
     playerSprite.setPosition(playerXPositions[playerPosition], playerYPositions[playerPosition])
     snakeSprite.setPosition(snakeXPositions[snakePosition], snakeYPositions[snakePosition])
 }
-function initCamel () {
-    camelSprite = sprites.create(img`
-. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
-. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
-. . . . . f f f f . . . . . . . . . . . . . . . . . . . . . . . 
-. . . . f f f f f f . . . . . . . . . . . . . . . . . . . . . . 
-. . f f f . f f f f . . . f f . . . f f . . . . . . . . . . . . 
-. . f f f f f f f f . . f f f f . f f f f . . . . . . . . . . . 
-. . . . f f f f f . . . f f f f f f f f f f . . . . . . . . . . 
-. . . f f f f f . . . f f f . . f . . . f f . . . . . . . . . . 
-. . . . . f f f f . f f f . . . f f . . f f f f . . . . . . . . 
-. . . . . f f f f f f f f f f f f f f f f f f f . . . . . . . . 
-. . . . f f f f f f f f f f f f f f f f f f f f f . . . . . . . 
-. . . . f f f f f f f f f f f f f f f f f f f . f f . . . . . . 
-. . . f f f f f f f f f f f f f f f f f f f f . . . . . . . . . 
-. . f f f f f f f f f f f f f f f f f f f f . . . . . . . . . . 
-f f f f f f f f f f f . . . f f f f f f . . . . . . . . . . . . 
-`, SpriteKind.Background)
-    camelSprite.setPosition(61, 28)
-}
 function initEnemies () {
     snakeSprite = sprites.create(img`
 . . . . . . . . . . . . . . . . 
@@ -91,10 +70,16 @@ f f f . . f f f f . . f f f . .
 . . f f f f . . . f f f f . . . 
 `, SpriteKind.Player)
     playerSprite.setPosition(105, 90)
-    playerXPositions = [105, 85, 60]
+    playerXPositions = [105, 85, 50]
     playerYPositions = [90, 100, 85]
     playerPosition = 0
+    info.setLife(3)
+    info.setScore(0)
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    otherSprite.destroy(effects.spray, 500)
+    info.changeScoreBy(10)
+})
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     if (playerPosition > 0 && playerPosition <= 2) {
         playerPosition = playerPosition - 1
@@ -106,6 +91,27 @@ function nextSnakePosition () {
     } else {
         snakePosition = 0
     }
+}
+function initCamel () {
+    camelSprite = sprites.create(img`
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . . f f f f . . . . . . . . . . . . . . . . . . . . . . . 
+. . . . f f f f f f . . . . . . . . . . . . . . . . . . . . . . 
+. . f f f . f f f f . . . f f . . . f f . . . . . . . . . . . . 
+. . f f f f f f f f . . f f f f . f f f f . . . . . . . . . . . 
+. . . . f f f f f . . . f f f f f f f f f f . . . . . . . . . . 
+. . . f f f f f . . . f f f . . f . . . f f . . . . . . . . . . 
+. . . . . f f f f . f f f . . . f f . . f f f f . . . . . . . . 
+. . . . . f f f f f f f f f f f f f f f f f f f . . . . . . . . 
+. . . . f f f f f f f f f f f f f f f f f f f f f . . . . . . . 
+. . . . f f f f f f f f f f f f f f f f f f f . f f . . . . . . 
+. . . f f f f f f f f f f f f f f f f f f f f . . . . . . . . . 
+. . f f f f f f f f f f f f f f f f f f f f . . . . . . . . . . 
+f f f f f f f f f f f . . . f f f f f f . . . . . . . . . . . . 
+`, SpriteKind.Background)
+    camelSprite.setPosition(61, 28)
 }
 let camelSprite: Sprite = null
 let snakeYPositions: number[] = []
